@@ -18,9 +18,10 @@ import AIAssistant from '../pages/ai/AIAssistant';
 import Operations from '../pages/operations/Operations';
 import Weather from '../pages/weather/Weather';
 import Settings from '../pages/settings/Settings';
-import NotFound from '../pages/NotFound';
 import Landing from '../pages/public/Landing';
 import GetAccess from '../pages/public/GetAccess';
+import Market from '../pages/public/Market';
+import NotFound from '../pages/NotFound';
 
 const AppRoutes = () => {
     const { user, isAuthenticated, isLoading } = useAuth();
@@ -33,13 +34,14 @@ const AppRoutes = () => {
 
     return (
         <Routes>
+            {/* Public Routes */}
+            <Route element={<PublicLayout />}>
+                <Route path="/" element={<Landing />} />
+                <Route path="/get-access" element={<GetAccess />} />
+                <Route path="/market" element={<Market />} />
+            </Route>
 
-            
-<Route element={<PublicLayout />}>
-    <Route path="/" element={<Landing />} />
-    <Route path="/get-access" element={<GetAccess />} />
-</Route>
-
+            {/* Auth Routes */}
             <Route element={<AuthLayout />}>
                 <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} />
                 <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} />
@@ -47,8 +49,10 @@ const AppRoutes = () => {
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
             </Route>
 
+            {/* Pending Approval */}
             <Route path="/pending" element={isAuthenticated && user?.approvalStatus === 'pending' ? <PendingApproval /> : <Navigate to="/dashboard" />} />
 
+            {/* Protected Dashboard Routes */}
             <Route element={isAuthenticated ? <DashboardLayout /> : <Navigate to="/login" />}>
                 <Route path="/dashboard" element={<FarmerDashboard />} />
                 <Route path="/farms" element={<FarmList />} />
@@ -74,6 +78,7 @@ const AppRoutes = () => {
                 <Route path="/settings" element={<Settings />} />
             </Route>
 
+            {/* Mobile Routes */}
             <Route element={isAuthenticated ? <MobileLayout /> : <Navigate to="/login" />}>
                 <Route path="/m/" element={<FarmerDashboard />} />
                 <Route path="/m/farms" element={<FarmList />} />
@@ -87,7 +92,7 @@ const AppRoutes = () => {
                 <Route path="/m/settings" element={<Settings />} />
             </Route>
 
-            <Route path="/" element={<Navigate to="/dashboard" />} />
+            {/* Fallback */}
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

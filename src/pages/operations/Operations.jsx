@@ -6,10 +6,10 @@ import ProductionTab from './ProductionTab';
 import InventoryTab from './InventoryTab';
 import EquipmentTab from './EquipmentTab';
 import FinanceTab from './FinanceTab';
-import TeamTab from './TeamTab';
-import TasksTab from './TasksTab';
+import TeamTasksTab from './TeamTasksTab';
+import MarketTab from './MarketTab';
 import ReportsTab from './ReportsTab';
-import { GitBranch, Heart, Package, Boxes, Wrench, DollarSign, Users, CheckSquare, FileText } from 'lucide-react';
+import { GitBranch, Heart, Package, Boxes, Wrench, DollarSign, Users, ShoppingBag, FileText } from 'lucide-react';
 
 export default function Operations() {
     const { user } = useAuth();
@@ -22,8 +22,8 @@ export default function Operations() {
         { key: 'inventory', icon: Boxes, label: 'Inventory', roles: ['farmer', 'manager'] },
         { key: 'equipment', icon: Wrench, label: 'Equipment', roles: ['farmer', 'manager'] },
         { key: 'finance', icon: DollarSign, label: 'Finance', roles: ['farmer', 'manager'] },
-        { key: 'team', icon: Users, label: 'Team', roles: ['farmer'] },
-        { key: 'tasks', icon: CheckSquare, label: 'Tasks', roles: ['farmer', 'manager'] },
+        { key: 'team', icon: Users, label: 'Team & Tasks', roles: ['farmer', 'worker', 'vet', 'manager'] },
+        { key: 'market', icon: ShoppingBag, label: 'Market', roles: ['farmer'] },
         { key: 'reports', icon: FileText, label: 'Reports', roles: ['farmer', 'manager'] },
     ];
 
@@ -46,8 +46,8 @@ export default function Operations() {
             {tab === 'inventory' && <InventoryTab readOnly={!['farmer', 'manager'].includes(role)} />}
             {tab === 'equipment' && <EquipmentTab readOnly={!['farmer', 'manager'].includes(role)} />}
             {tab === 'finance' && <FinanceTab />}
-            {tab === 'team' && <TeamTab />}
-            {tab === 'tasks' && <TasksTab readOnly={!['farmer', 'manager'].includes(role)} />}
+            {tab === 'team' && <TeamTasksTab readOnly={role === 'worker' || role === 'vet'} />}
+            {tab === 'market' && <MarketTab />}
             {tab === 'reports' && <ReportsTab />}
         </div>
     );

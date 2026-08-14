@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ChevronDown, Phone, Mail, MessageCircle, HelpCircle, BookOpen, Shield, Moon, Sun } from 'lucide-react';
+import { Menu, X, ChevronDown, Phone, Mail, MessageCircle, HelpCircle, BookOpen, Shield, Moon, Sun, ShoppingBag } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -9,12 +9,17 @@ export default function Navbar() {
     const [open, setOpen] = useState(false);
     const [supportOpen, setSupportOpen] = useState(false);
     const [settings, setSettings] = useState({});
+    const [marketEnabled, setMarketEnabled] = useState(false);
     const { isAuthenticated } = useAuth();
     const { theme, toggleTheme } = useTheme();
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_URL || '/api'}/admin/public/settings`)
             .then((res) => setSettings(res.data.data || {}))
+            .catch(() => {});
+        
+        axios.get(`${import.meta.env.VITE_API_URL || '/api'}/public/market/status`)
+            .then((res) => setMarketEnabled(res.data.data?.enabled || false))
             .catch(() => {});
     }, []);
 
@@ -31,6 +36,11 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center gap-6">
                         <Link to="/" className="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-500">Home</Link>
                         <a href="#features" className="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-500">Features</a>
+                        {marketEnabled && (
+                            <Link to="/market" className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300 hover:text-primary-500">
+                                <ShoppingBag className="w-4 h-4" /> Market
+                            </Link>
+                        )}
                         <a href="#downloads" className="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-500">Downloads</a>
 
                         <div className="relative">
@@ -91,6 +101,11 @@ export default function Navbar() {
                     <div className="md:hidden pb-4 space-y-2">
                         <Link to="/" className="block px-3 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Home</Link>
                         <a href="#features" className="block px-3 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Features</a>
+                        {marketEnabled && (
+                            <Link to="/market" className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                                <ShoppingBag className="w-4 h-4" /> Market
+                            </Link>
+                        )}
                         <a href="#downloads" className="block px-3 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Downloads</a>
                         <a href="#contact" className="block px-3 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">Contact</a>
                         <a href="#faq" className="block px-3 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">FAQs</a>

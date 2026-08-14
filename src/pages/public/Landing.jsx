@@ -8,6 +8,7 @@ import Help from './Help';
 import Contact from './Contact';
 import FAQ from './FAQ';
 import CTA from './CTA';
+import MarketPreview from './MarketPreview';
 
 export default function Landing() {
     return (
@@ -15,6 +16,7 @@ export default function Landing() {
             <Hero />
             <Features />
             <HowItWorks />
+            <MarketPreview />
             <Pricing />
             <Downloads />
             <About />
